@@ -34,8 +34,10 @@ function App() {
     }
     try {
       const data = await store.collection('agenda').add(usuario)
-      alert('Tarea Añadida')
-      // console.log('Tarea Añadida');
+      const{docs}= await store.collection('agenda').get()
+      const nuevoArray=docs.map(item=>({id:item.id, ...item.data()}))
+      setUser(nuevoArray)
+      // alert('Tarea Añadida')
 
     } catch (err) {
       console.log(err);
