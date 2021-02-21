@@ -8,7 +8,17 @@ function App() {
   const [nombre, setNombre] = useState('')
   const [phone, setPhone] = useState('')
   const [error, setError] = useState('')
-  const [usuario, setUsuario] = useState([])
+  const [user, setUser] = useState([])
+
+  useEffect(() => {
+    const getUser= async ()=>{
+      const{docs}= await store.collection('agenda').get()
+      const nuevoArray=docs.map(item=>({id:item.id, ...item.data()}))
+      setUser(nuevoArray)
+    }
+    getUser()
+    
+  }, [])
 
   const setUsuarios = async (e) => {
     e.preventDefault()
@@ -78,6 +88,17 @@ function App() {
         </div>
         <div className="col">
           <h2>Lista de Contactos</h2>
+          {
+            user.length !==0 ?
+            user.map(item =>(
+              <li key={item.id}>{item.nombre}---{item.telefono}</li>
+            ))
+            :
+            (
+              <span>Opps, Aún no tienes usuaios</span>
+            )
+
+          }
         </div>
       </div>
     </div>
